@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
@@ -7,8 +7,37 @@
     <link rel="stylesheet" href="./src/style.css" />
     <title>Tailwind Generator</title>
   </head>
-  <body>
-    <div id="app"></div>
+  <body class="h-full">
+    <iframe id="generated-code" class="w-full h-full"></iframe>
+    <div
+      class="absolute bottom-1 left-0 right-0 flex items-center justify-center"
+    >
+      <form
+        id="generate-form"
+        class="max-w-md bg-gray-300 p-2 w-full rounded shadow-md"
+      >
+        <ul
+          id="messages"
+          class="flex flex-col gap-1 text-xs max-h-[150px] overflow-auto"
+        ></ul>
+        <fieldset class="flex items-center w-full gap-2">
+          <textarea
+            type="text"
+            id="prompt"
+            name="prompt"
+            class="bg-gray-50 border border-gray-300 disabled:bg-gray-500 disabled:cursor-not-allowed text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            placeholder="A beautiful landing page"
+            required
+          ></textarea>
+          <button
+            type="submit"
+            class="text-white bg-blue-700 disabled:bg-gray-500 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5"
+          >
+            Generate
+          </button>
+        </fieldset>
+      </form>
+    </div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
