@@ -1,5 +1,5 @@
 import { ChatCompletionMessageParam } from "openai/resources/index.mjs";
-import { openai } from "./openai";
+import { openai } from "./openai.ts";
 
 const form = document.querySelector("#generate-form") as HTMLFormElement;
 const iframe = document.querySelector("#generated-code") as HTMLIFrameElement;
@@ -53,18 +53,39 @@ form.addEventListener("submit", async (e) => {
     return;
   }
 
-  let openaiKey = localStorage.getItem("openai-key") ?? "";
+  async function getValidOpenAIKey() {
+    let openaiKey = localStorage.getItem("openai-key") ?? "";
 
-  if (!openaiKey) {
-    const newKey = window.prompt("Please enter your OpenAI API key");
-
-    if (!newKey) {
-      return;
+    if (openaiKey) {
+      try {
+        await openai(openaiKey).chat.completions.create({
+          model: "text-davinci-003",
+          messages: [{ role: "system", content: "Test" }],
+        });
+      } catch (error) {
+        console.error("Invalid API key, requesting a new one.");
+        openaiKey = "";
+      }
     }
 
-    localStorage.setItem("openai-key", newKey);
+    if (!openaiKey) {
+      const newKey = window.prompt("Please enter your OpenAI API key");
 
-    openaiKey = newKey;
+      if (!newKey) {
+        alert("API key is required to proceed.");
+        return null;
+      }
+
+      localStorage.setItem("openai-key", newKey);
+      openaiKey = newKey;
+    }
+
+    return openaiKey;
+  }
+
+  const openaiKey = await getValidOpenAIKey();
+  if (!openaiKey) {
+    return;
   }
 
   messages.push({
